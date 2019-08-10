@@ -1,0 +1,14 @@
+{
+  "name": "dotprejs",
+  "version": "1.0.0",
+  "main": "src/toolchain",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^6.0.1",
+    "webpack": "^4.39.1",
+    "webpack-cli": "^3.3.6"
+  },
+  "dependencies": {
+    "fs-extra": "^8.1.0"
+  }
+}
