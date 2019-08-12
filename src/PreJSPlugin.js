@@ -9,6 +9,8 @@ const toolchain = require('./toolchain');
 
 const tmpPrefix = path.resolve(os.tmpdir(), 'prejs-');
 
+const GLOBALS_TO_CAPTURE = ['exports', 'require', 'module', '__filename', '__dirname']
+
 class PreJSPlugin {
   constructor(options = {}) {
     this.options = options;
@@ -27,7 +29,8 @@ class PreJSPlugin {
             const tmpDir = await fs.mkdtemp(tmpPrefix);
             const source = path.resolve(tmpDir, 'in.js');
             const out = path.resolve(tmpDir, 'out');
-            await fs.writeFile(source, Buffer.from(compilation.assets[filename].source()));
+            const wrapped = `(function (${GLOBALS_TO_CAPTURE.join(', ')}) {\n${Buffer.from(compilation.assets[filename].source())}\n})`;
+            await fs.writeFile(source, wrapped);
             const result = cp.spawnSync(this.runtime, [path.resolve(__dirname, 'runtime-cache-creator.js'), source, out]);
             if (result.status !== 0) throw new Error('Failed to generate cache');
             const prejs = await fs.readFile(out);
@@ -37,7 +40,7 @@ class PreJSPlugin {
             const target = `${filename.replace(/\.js$/, '.prejs')}`
             compilation.assets[target] = new RawSource(prejs);
             compilation.assets[filename] = new RawSource(
-              `const fs=require('fs');const vm=require('vm');(${toolchain.executePreJS.toString()})(require('path').resolve(__dirname, '${target}'))`
+              `const fs=require('fs');const vm=require('vm');(${toolchain.executePreJS.toString()})(require('path').resolve(__dirname, '${target}'))(${GLOBALS_TO_CAPTURE.join(', ')})`
             )
           }
         } catch (err) {

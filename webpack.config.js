@@ -1,7 +1,7 @@
-const PreJSPlugin = require('./PreJSPlugin');
+const PreJSPlugin = require('./src/PreJSPlugin');
 
 module.exports = {
-  entry: ['./example/lodash'],
+  entry: ['./spec/fixture/lodash'],
   plugins: [
     new PreJSPlugin({
       assets: ['main.js'],
