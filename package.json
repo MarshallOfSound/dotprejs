@@ -1,6 +1,6 @@
 {
   "name": "dotprejs",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "main": "src/toolchain",
   "license": "MIT",
   "devDependencies": {
