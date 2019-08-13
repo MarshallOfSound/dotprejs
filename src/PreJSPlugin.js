@@ -9,7 +9,7 @@ const toolchain = require('./toolchain');
 
 const tmpPrefix = path.resolve(os.tmpdir(), 'prejs-');
 
-const GLOBALS_TO_CAPTURE = ['exports', 'require', 'module', '__filename', '__dirname']
+const GLOBALS_TO_CAPTURE = ['exports', 'require', 'module', '__filename', '__dirname', 'Buffer']
 
 class PreJSPlugin {
   constructor(options = {}) {
